@@ -3,31 +3,41 @@
 //    };
 
 
-         
-
-const form = document.querySelector('form'); 
-const tweetInput = document.querySelector('.tweet-input')
-const timeline = document.querySelector('.timeline')
-const submit=document.querySelector(".tweet-button")
-//let characterCount = document.createElement('p');
-let count = document.querySelector('.characterCount')
-
+const form = document.querySelector('form');
+const tweetInput = document.querySelector('.tweet-input');
+const timeline = document.querySelector('.timeline');
+const submit=document.querySelector(".tweet-button");
+let count = document.querySelector('.characterCount');
 
 form.addEventListener('submit', function(event){
-    event.preventDefault()
-    if (count.textContent<=280){
-    
-    
-    let tweetOutput=document.createElement("div");
-    tweetOutput.className = 'tweet'
-    tweetOutput.innerHTML = `<p>${tweetInput.value}</p> 
-                            <input class="delete-button" type="submit" value="Delete">`;
-        
-        tweetOutput.addEventListener('submit', function(event){
-            event.preventDefault(); 
-            timeline.removeChild(tweetOutput)
-        })
+    event.preventDefault();
 
+    if (count.textContent<=280){
+    let tweetOutput=document.createElement("div");
+    tweetOutput.className = 'tweet';
+
+    //tweetOutput.innerHTML = `<p>${tweetInput.value}</p>`
+    let n=tweetInput.value.indexOf("@");
+    if (n!==-1){
+      let newString = tweetInput.value;
+
+      let newN=n;
+      // let count=(tweetInput.value.match("@")||[]).length;
+      for (i=0;i<3;i++){
+      let m=tweetInput.value.indexOf(" ",newN)
+      let name=tweetInput.value.slice(newN+1,m);
+      newN=tweetInput.value.indexOf("@",newN+1);
+      newString=newString.replace(`@${name}`,`<a href="/${name}">@${name}</a>`)
+    }
+    tweetOutput.innerHTML = `<p>${newString}</p>`;
+    }
+
+    let deleteTweet=document.createElement("button");
+    deleteTweet.innerHTML=`Delete`;
+    deleteTweet.onclick=function(event){
+      timeline.removeChild(tweetOutput);
+    }
+    tweetOutput.appendChild(deleteTweet);
 
     let refTweet = document.querySelector('.tweet')
     if (timeline == null) {
@@ -36,13 +46,12 @@ form.addEventListener('submit', function(event){
         timeline.insertBefore(tweetOutput, refTweet);
     }
     tweetInput.value = "";
-    count.textContent = 0; 
-    
-}
-})
+    count.textContent = 0;
 
-    
-// form.insertBefore(characterCount,submit);
+  };
+});
+
+
 
 tweetInput.addEventListener('input', function(event){
     count.textContent = event.target.value.length;
@@ -51,12 +60,4 @@ tweetInput.addEventListener('input', function(event){
     } else {
         count.style.color="black";
     }
-    //characterCount.className="count";
-    //characterCount.innerHTML=`${count}`
 })
-
-console.log(timeline)
-
-
-
-
