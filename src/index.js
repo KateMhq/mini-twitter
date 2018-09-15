@@ -22,8 +22,9 @@ form.addEventListener('submit', function(event){
       let newString = tweetInput.value;
 
       let newN=n;
-      // let count=(tweetInput.value.match("@")||[]).length;
-      for (i=0;i<3;i++){
+      let count=(newString.match(/@/g)).length;
+      console.log(count);
+      for (i=0;i<count;i++){
       let m=tweetInput.value.indexOf(" ",newN)
       let name=tweetInput.value.slice(newN+1,m);
       newN=tweetInput.value.indexOf("@",newN+1);
